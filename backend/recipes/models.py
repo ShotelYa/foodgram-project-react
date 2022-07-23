@@ -56,7 +56,7 @@ class Recipe(models.Model):
     image = models.ImageField('Фото блюда', upload_to='recipes/')
     text = models.TextField('Описание')
     cooking_time = models.PositiveIntegerField('Время приготовления')
-    ingredients = models.ManyToManyField(Ingredient)
+    ingredients = models.ManyToManyField("IngredientRecipe", related_name="recipe_ingredient")
     tags = models.ManyToManyField(Tag, verbose_name='Теги')
 
     class Meta:
@@ -70,7 +70,6 @@ class Recipe(models.Model):
 
 class IngredientRecipe(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
-    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
 
     class Meta:
@@ -80,7 +79,7 @@ class IngredientRecipe(models.Model):
         constraints = [
             models.UniqueConstraint(fields=[
                 'ingredient',
-                'recipe',
+                'amount',
             ],
                                     name='ingredient_recipe')
         ]

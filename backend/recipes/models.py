@@ -1,4 +1,4 @@
-from unicodedata import name
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.contrib.auth import get_user_model
 
@@ -53,10 +53,10 @@ class Recipe(models.Model):
                                on_delete=models.CASCADE,
                                verbose_name='Автор рецепта')
     name = models.CharField('Название рецепта', max_length=256)
-    image = models.ImageField('Фото блюда', upload_to='recipes/')
+    image = models.ImageField('Фото блюда', upload_to='image/')
     text = models.TextField('Описание')
-    cooking_time = models.PositiveIntegerField('Время приготовления')
-    ingredients = models.ManyToManyField("IngredientRecipe", related_name="recipe_ingredient")
+    cooking_time = models.PositiveIntegerField('Время приготовления', validators=[MinValueValidator(1)])
+    ingredients = models.ManyToManyField(Ingredient, related_name="recipe_ingredient", verbose_name='Продукты')
     tags = models.ManyToManyField(Tag, verbose_name='Теги')
 
     class Meta:
@@ -65,7 +65,7 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
     def __str__(self):
-        return self.text
+        return f'{self.name}, {self.ingredients.name}'
 
 
 class IngredientRecipe(models.Model):

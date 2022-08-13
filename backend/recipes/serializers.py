@@ -30,7 +30,7 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = IngredientRecipe
-        fields = ("id", "name", "measurement_unit")
+        fields = ['id', 'name', 'measurement_unit']
 
 
 class CartSerializer(serializers.ModelSerializer):
@@ -57,7 +57,7 @@ class ListRrecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     tags = TagSerializer(many=True, read_only=True)
     author = CustomUserSerializer(read_only=True)
-    ingredients = IngredientRecipeSerializer()
+    ingredients = serializers.SerializerMethodField()
     is_favorited = serializers.SerializerMethodField()
     is_in_shopping_cart = serializers.SerializerMethodField()
 
@@ -77,7 +77,7 @@ class ListRrecipeSerializer(serializers.ModelSerializer):
         ]
 
     def get_ingredients(self, obj):
-        ingredients = IngredientRecipe.objects.filter(recipe=obj)
+        ingredients = IngredientRecipe.objects.filter(recipes=obj)
         return IngredientRecipeSerializer(ingredients, many=True).data
 
     def get_is_favorited(self, obj):
@@ -116,6 +116,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = [
+            'author',
             'id',
             'title',
             'image',

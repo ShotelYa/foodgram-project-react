@@ -65,11 +65,12 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
     def __str__(self):
-        return f'{self.name}, {self.ingredients.name}'
+        return self.name
 
 
 class IngredientRecipe(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
+    recipes = models.ForeignKey(Recipe, on_delete=models.CASCADE)
     amount = models.PositiveIntegerField()
 
     class Meta:

@@ -9,6 +9,7 @@ from rest_framework import filters, viewsets, status
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import HttpResponse
+from .permissions import IsAuthorOrAdminOrReadOnly
 
 
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
@@ -16,6 +17,8 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = TagSerializer
     filter_backends = (filters.SearchFilter, )
     search_fields = ("name", )
+    pagination_class = None
+
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
@@ -23,11 +26,13 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     filter_backends = (IngredientSearchFilter, )
     search_fields = ('^name', )
+    pagination_class = None
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
+    permission_classes = (IsAuthorOrAdminOrReadOnly,)
 
     def get_serializer_class(self):
         if self.request.method == 'POST' or self.request.method == 'PATCH':
@@ -64,8 +69,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=['GET'],
-        permission_classes=[IsAuthenticated],
+        methods=('get'),
+        permission_classes=(IsAuthenticated),
     )
     def shopping_cart(self, request):
         ingredients = Ingredient.objects.filter(

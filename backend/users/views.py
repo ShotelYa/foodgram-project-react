@@ -6,7 +6,6 @@ from rest_framework.views import APIView
 from users.models import Follow
 from users.serializers import FollowSerializer
 
-
 User = get_user_model()
 
 

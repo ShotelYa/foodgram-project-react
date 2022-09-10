@@ -1,9 +1,10 @@
+from django.contrib.auth import get_user_model
 from django.forms import ValidationError
-from .models import Tag, Ingredient, Recipe, IngredientRecipe, Favorite, Cart
+from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from users.serializers import CustomUserSerializer
-from drf_extra_fields.fields import Base64ImageField
-from django.contrib.auth import get_user_model
+
+from .models import Cart, Favorite, Ingredient, IngredientRecipe, Recipe, Tag
 
 User = get_user_model()
 
@@ -18,7 +19,6 @@ class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
         fields = ['id', 'name', 'measurement_unit']
-        
 
 
 class IngredientRecipeSerializer(serializers.ModelSerializer):
@@ -26,7 +26,6 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
     name = serializers.ReadOnlyField(source="ingredient.name")
     measurement_unit = serializers.ReadOnlyField(
         source="ingredient.measurement_unit")
-    
 
     class Meta:
         model = IngredientRecipe

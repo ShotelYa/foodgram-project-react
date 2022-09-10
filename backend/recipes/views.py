@@ -1,14 +1,17 @@
 from django.db.models import Sum
-from django.shortcuts import get_object_or_404
-from requests import Response
-from .models import Tag, Ingredient, Recipe, Cart, Favorite
-from recipes.serializers import TagSerializer, IngredientSerializer, ListRrecipeSerializer, CreateRecipeSerializer, CartSerializer
-from users.serializers import RecipeSerializer
-from .filters import IngredientSearchFilter
-from rest_framework import filters, viewsets, status
-from rest_framework.decorators import action
-from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.http import HttpResponse
+from django.shortcuts import get_object_or_404
+from recipes.serializers import (CartSerializer, CreateRecipeSerializer,
+                                 IngredientSerializer, ListRrecipeSerializer,
+                                 TagSerializer)
+from requests import Response
+from rest_framework import filters, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
+from users.serializers import RecipeSerializer
+
+from .filters import IngredientSearchFilter
+from .models import Cart, Favorite, Ingredient, Recipe, Tag
 from .permissions import IsAuthorOrAdminOrReadOnly
 
 
@@ -18,7 +21,6 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
     filter_backends = (filters.SearchFilter, )
     search_fields = ("name", )
     pagination_class = None
-
 
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
@@ -32,7 +34,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = RecipeSerializer
-    permission_classes = (IsAuthorOrAdminOrReadOnly,)
+    permission_classes = (IsAuthorOrAdminOrReadOnly, )
 
     def get_serializer_class(self):
         if self.request.method == 'POST' or self.request.method == 'PATCH':
@@ -88,14 +90,14 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'measurement_unit': measurement_unit
             }
             out_list = ["Ingredient list\n\n"]
-            for i, value in shop_list.items():
-                out_list.append(f" {i} - {value['amount']} "
-                                f"{value['measurement_unit']}\n")
-            return HttpResponse(
-                out_list,
-                {
-                    "Content-Type": "text/plain",
-                    "Content-Disposition":
-                    'attachment; filename="out_list.txt"',
-                },
-            )
+        for i, value in shop_list.items():
+            out_list.append(f" {i} - {value['amount']} "
+                            f"{value['measurement_unit']}\n")
+        return HttpResponse(
+            out_list,
+            {
+                "Content-Type": "text/plain",
+                "Content-Disposition":
+                'attachment; filename="out_list.txt"',
+            },
+        )

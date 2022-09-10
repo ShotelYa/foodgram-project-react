@@ -17,7 +17,8 @@
 
 from django.contrib import admin
 
-from .models import Ingredient, Recipe, IngredientRecipe, Tag
+from .models import Ingredient, IngredientRecipe, Recipe, Tag
+
 
 @admin.register(IngredientRecipe)
 class IngredientAmount(admin.ModelAdmin):

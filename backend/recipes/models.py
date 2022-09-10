@@ -1,6 +1,6 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator
 from django.db import models
-from django.contrib.auth import get_user_model
 
 User = get_user_model()
 
@@ -55,8 +55,11 @@ class Recipe(models.Model):
     name = models.CharField('Название рецепта', max_length=256)
     image = models.ImageField('Фото блюда', upload_to='image/')
     text = models.TextField('Описание')
-    cooking_time = models.PositiveIntegerField('Время приготовления', validators=[MinValueValidator(1)])
-    ingredients = models.ManyToManyField(Ingredient, related_name="recipe_ingredient", verbose_name='Продукты')
+    cooking_time = models.PositiveIntegerField(
+        'Время приготовления', validators=[MinValueValidator(1)])
+    ingredients = models.ManyToManyField(Ingredient,
+                                         related_name="recipe_ingredient",
+                                         verbose_name='Продукты')
     tags = models.ManyToManyField(Tag, verbose_name='Теги')
 
     class Meta:
@@ -82,9 +85,8 @@ class IngredientRecipe(models.Model):
                 'ingredient',
                 'amount',
             ],
-                                    name='ingredient_recipe')
+                name='ingredient_recipe')
         ]
-
 
 
 class Favorite(models.Model):
@@ -92,8 +94,8 @@ class Favorite(models.Model):
                              on_delete=models.CASCADE,
                              verbose_name='Пользователь')
     recipe = models.ForeignKey(Recipe,
-                                on_delete=models.CASCADE,
-                                verbose_name='Рецепты')
+                               on_delete=models.CASCADE,
+                               verbose_name='Рецепты')
 
     class Meta:
         ordering = ['-id']

@@ -52,7 +52,7 @@ class CartSerializer(serializers.ModelSerializer):
         return data
 
 
-class ListRrecipeSerializer(serializers.ModelSerializer):
+class ListRecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     tags = TagSerializer(many=True, read_only=True)
     author = CustomUserSerializer(read_only=True)

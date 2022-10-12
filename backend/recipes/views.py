@@ -2,7 +2,7 @@ from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from recipes.serializers import (CartSerializer, CreateRecipeSerializer,
-                                 IngredientSerializer, ListRrecipeSerializer,
+                                 IngredientSerializer, ListRecipeSerializer,
                                  TagSerializer)
 from requests import Response
 from rest_framework import filters, status, viewsets
@@ -39,7 +39,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.request.method == 'POST' or self.request.method == 'PATCH':
             return CreateRecipeSerializer
-        return ListRrecipeSerializer
+        return ListRecipeSerializer
 
     def add_or_delete(self, request, model, id):
         if request.method == 'DELETE':

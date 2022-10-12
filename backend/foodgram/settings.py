@@ -132,6 +132,7 @@ DJOSER = {
     "LOGIN_FIELD": "email",
     "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
     "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
     "SEND_ACTIVATION_EMAIL": False,
     "SERIALIZERS": {
         "user_create": "users.serializers.CustomUserSerializer",
@@ -139,7 +140,7 @@ DJOSER = {
         "current_user": "users.serializers.CustomUserSerializer",
     },
     "PERMISSIONS": {
-        "user": ("rest_framework.permissions.AllowAny", ),
+        "user": ("rest_framework.permissions.IsAuthenticated", ),
         "user_list": ("rest_framework.permissions.AllowAny", ),
     },
     "HIDE_USERS": False,

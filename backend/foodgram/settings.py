@@ -130,10 +130,9 @@ REST_FRAMEWORK = {
 
 DJOSER = {
     "LOGIN_FIELD": "email",
-    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
-    "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
-    "SEND_ACTIVATION_EMAIL": False,
+    "HIDE_USERS": False,
     "SERIALIZERS": {
+        "user_create": "users.serializers.CustomUserSerializer",
         "user": "users.serializers.CustomUserSerializer",
         "current_user": "users.serializers.CustomUserSerializer",
     },
@@ -141,5 +140,5 @@ DJOSER = {
         "user": ("rest_framework.permissions.AllowAny", ),
         "user_list": ("rest_framework.permissions.AllowAny", ),
     },
-    "HIDE_USERS": False,
+    
 }

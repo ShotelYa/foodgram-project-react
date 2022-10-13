@@ -6,12 +6,7 @@ SECRET_KEY = '@msn(0!5glwue#vro51wq9%+ys_g)u#hx0swq4by2-7tt$14jw'
 
 DEBUG = True
 
-ALLOWED_HOSTS = [
-    '164.90.162.154',
-    '127.0.0.1',
-    'localhost',
-    "backend",
-]
+ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -131,6 +126,10 @@ REST_FRAMEWORK = {
 DJOSER = {
     "LOGIN_FIELD": "email",
     "HIDE_USERS": False,
+    "PASSWORD_RESET_CONFIRM_URL": "#/password/reset/confirm/{uid}/{token}",
+    "USERNAME_RESET_CONFIRM_URL": "#/username/reset/confirm/{uid}/{token}",
+    "ACTIVATION_URL": "#/activate/{uid}/{token}",
+    "SEND_ACTIVATION_EMAIL": False,
     "SERIALIZERS": {
         "user_create": "users.serializers.CustomUserSerializer",
         "user": "users.serializers.CustomUserSerializer",

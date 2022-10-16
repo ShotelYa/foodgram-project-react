@@ -1,10 +1,40 @@
 from django.contrib.auth import get_user_model
-from djoser.serializers import UserSerializer
+from djoser.serializers import UserSerializer, UserCreateSerializer
 from recipes.models import Recipe
 from rest_framework import serializers
 from users.models import Follow
+from rest_framework.validators import UniqueValidator
 
 User = get_user_model()
+
+
+class CustomUserCreateSerializer(UserCreateSerializer):
+    email = serializers.EmailField(
+        validators=[UniqueValidator(queryset=User.objects.all())])
+    username = serializers.CharField(
+        validators=[UniqueValidator(queryset=User.objects.all())])
+
+    class Meta:
+        fields = ("email", "id", "password", "username", "first_name",
+                  "last_name")
+        model = User
+        extra_kwargs = {
+            "email": {
+                "required": True
+            },
+            "username": {
+                "required": True
+            },
+            "password": {
+                "required": True
+            },
+            "first_name": {
+                "required": True
+            },
+            "last_name": {
+                "required": True
+            },
+        }
 
 
 class CustomUserSerializer(UserSerializer):

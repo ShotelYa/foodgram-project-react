@@ -15,8 +15,9 @@ class CustomUserCreateSerializer(UserCreateSerializer):
         validators=[UniqueValidator(queryset=User.objects.all())])
 
     class Meta:
-        fields = ("email", "id", "password", "username", "first_name",
-                  "last_name")
+        fields = [
+            'email', 'id', 'password', 'username', 'first_name', 'last_name'
+        ]
         model = User
         extra_kwargs = {
             "email": {
@@ -66,9 +67,9 @@ class FollowSerializer(serializers.ModelSerializer):
     username = serializers.ReadOnlyField(source='author.username')
     first_name = serializers.ReadOnlyField(source='author.first_name')
     last_name = serializers.ReadOnlyField(source='author.last_name')
-    is_subscribed = serializers.SerializerMethodField()
-    recipes = serializers.SerializerMethodField()
-    recipes_count = serializers.SerializerMethodField()
+    is_subscribed = serializers.SerializerMethodField('get_is_subscribed')
+    recipes = serializers.SerializerMethodField('get_recipes')
+    recipes_count = serializers.SerializerMethodField('get_recipes_count')
 
     class Meta:
         model = User

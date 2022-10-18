@@ -7,7 +7,7 @@ from recipes.serializers import (CartSerializer, CreateRecipeSerializer,
 from requests import Response
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.serializers import RecipeSerializer
 
 from .filters import IngredientSearchFilter

@@ -7,7 +7,7 @@ from recipes.serializers import (CartSerializer, CreateRecipeSerializer,
 from requests import Response
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from users.serializers import RecipeSerializer
 
 from .filters import IngredientSearchFilter
@@ -18,6 +18,9 @@ from .permissions import IsAuthorOrAdminOrReadOnly
 class TagViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Tag.objects.all()
     serializer_class = TagSerializer
+    permission_classes = [
+        AllowAny,
+    ]
     filter_backends = (filters.SearchFilter, )
     search_fields = ("name", )
     pagination_class = None
@@ -25,10 +28,18 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
 
 class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Ingredient.objects.all()
+    permission_classes = [IsAuthorOrAdminOrReadOnly, ]
     serializer_class = IngredientSerializer
     filter_backends = (IngredientSearchFilter, )
     search_fields = ('^name', )
     pagination_class = None
+
+    def get_queryset(self):
+        queryset = Ingredient.objects.all()
+        name = self.request.query_params.get("name")
+        if name:
+            queryset = queryset.filter(name__istartswith=name)
+        return queryset
 
 
 class RecipeViewSet(viewsets.ModelViewSet):
@@ -97,7 +108,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
             out_list,
             {
                 "Content-Type": "text/plain",
-                "Content-Disposition":
-                'attachment; filename="out_list.txt"',
+                "Content-Disposition": 'attachment; filename="out_list.txt"',
             },
         )

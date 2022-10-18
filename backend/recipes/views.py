@@ -10,7 +10,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.serializers import RecipeSerializer
 
-from .filters import IngredientSearchFilter
+# from .filters import IngredientSearchFilter
 from .models import Cart, Favorite, Ingredient, Recipe, Tag
 from .permissions import IsAuthorOrAdminOrReadOnly
 

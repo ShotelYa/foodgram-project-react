@@ -52,6 +52,16 @@ class CartSerializer(serializers.ModelSerializer):
         return data
 
 
+class FavoriteSerializer(serializers.ModelSerializer):
+    recipe = serializers.PrimaryKeyRelatedField(
+        queryset=Favorite.objects.all())
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+
+    class Meta:
+        model = Favorite
+        fields = ("recipe", "user")
+
+
 class ListRecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     tags = TagSerializer(many=True, read_only=True)
@@ -156,3 +166,12 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         tags = validated_data.pop('tags')
         self.add_ingredients_tags(recipe, ingredients, tags)
         return super().update(recipe, validated_data)
+
+
+class RecipeSerializerShort(serializers.ModelSerializer):
+    image = Base64ImageField()
+
+    class Meta:
+        model = Recipe
+        fields = ('id', 'name', 'image', 'cooking_time')
+        read_only_fields = ('id', 'name', 'image', 'cooking_time')

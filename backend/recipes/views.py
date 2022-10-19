@@ -3,12 +3,13 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from recipes.serializers import (CartSerializer, CreateRecipeSerializer,
                                  IngredientSerializer, ListRecipeSerializer,
-                                 TagSerializer)
+                                 TagSerializer, FavoriteSerializer,
+                                 RecipeSerializerShort)
 from requests import Response
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from users.serializers import RecipeSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .filters import IngredientSearchFilter
 from .models import Cart, Favorite, Ingredient, Recipe, Tag
@@ -22,7 +23,7 @@ class TagViewSet(viewsets.ReadOnlyModelViewSet):
         AllowAny,
     ]
     filter_backends = (filters.SearchFilter, )
-    search_fields = ("name", )
+    search_fields = ('name', )
     pagination_class = None
 
 
@@ -41,11 +42,10 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = CreateRecipeSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly, )
+    filter_backends = (DjangoFilterBackend, )
 
-    def get_serializer_class(self):
-        if self.request.method == 'POST' or self.request.method == 'PATCH':
-            return CreateRecipeSerializer
-        return ListRecipeSerializer
+    def perform_create(self, serializer):
+        serializer.seve(author=self.request.user)
 
     def add_or_delete(self, request, model, id):
         if request.method == 'DELETE':
@@ -60,7 +60,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, id=id)
         model.objects.create(user=request.user, recipe=recipe)
-        serializer = CartSerializer(recipe)
+        serializer = RecipeSerializerShort(recipe)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True,

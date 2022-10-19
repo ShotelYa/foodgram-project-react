@@ -55,7 +55,7 @@ class CustomUserSerializer(UserSerializer):
         return Follow.objects.filter(user=user, author=obj).exists()
 
 
-class RecipeSerializer(serializers.ModelSerializer):
+class RecipeFollowSerializer(serializers.ModelSerializer):
     class Meta:
         model = Recipe
         fields = ['id', 'name', 'image', 'cooking_time']

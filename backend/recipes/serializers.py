@@ -2,6 +2,7 @@ from django.contrib.auth import get_user_model
 from django.forms import ValidationError
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
+
 from users.serializers import CustomUserSerializer
 
 from .models import Cart, Favorite, Ingredient, IngredientRecipe, Recipe, Tag
@@ -170,8 +171,29 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 
 class RecipeSerializerShort(serializers.ModelSerializer):
     image = Base64ImageField()
+    tags = TagSerializer(many=True, read_only=True)
+    author = CustomUserSerializer(read_only=True)
+    ingredients = serializers.SerializerMethodField()
+    is_favorited = serializers.SerializerMethodField()
+    is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = ('id', 'name', 'image', 'cooking_time')
-        read_only_fields = ('id', 'name', 'image', 'cooking_time')
+        fields = [
+            'id',
+            'tags',
+            'author',
+            'ingredients',
+            'name',
+            'image',
+            'text',
+            'cooking_time',
+            'is_favorited',
+            'is_in_shopping_cart',
+        ]
+    # image = Base64ImageField()
+
+    # class Meta:
+    #     model = Recipe
+    #     fields = ('id', 'name', 'image', 'cooking_time')
+    #     read_only_fields = ('id', 'name', 'image', 'cooking_time')

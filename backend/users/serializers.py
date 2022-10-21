@@ -1,9 +1,9 @@
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
-from recipes.models import Recipe
-from recipes.serializers import RecipeSerializerShort
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
+
+from recipes.models import Recipe
 from users.models import Follow
 
 User = get_user_model()
@@ -84,7 +84,7 @@ class FollowSerializer(serializers.ModelSerializer):
 
     def get_recipes(self, obj):
         recipes = Recipe.objects.filter(author=obj.author)
-        serializer = RecipeSerializerShort(recipes, many=True)
+        serializer = RecipeFollowSerializer(recipes, many=True)
         return serializer.data
 
     def get_recipes_count(self, obj):

@@ -191,6 +191,7 @@ class RecipeSerializerShort(serializers.ModelSerializer):
             'is_favorited',
             'is_in_shopping_cart',
         ]
+
     # image = Base64ImageField()
 
     # class Meta:

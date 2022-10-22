@@ -113,13 +113,13 @@ class AddIngredientSerializer(serializers.ModelSerializer):
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
     author = CustomUserSerializer(read_only=True)
-    title = serializers.CharField(required=False)
+    text = serializers.CharField(required=False)
     image = Base64ImageField()
     description = serializers.CharField(required=False)
     cooking_time = serializers.IntegerField()
     ingredients = AddIngredientSerializer(many=True)
-    tag = serializers.PrimaryKeyRelatedField(many=True,
-                                             queryset=Tag.objects.all())
+    tags = serializers.PrimaryKeyRelatedField(many=True,
+                                              queryset=Tag.objects.all())
     pub_date = serializers.IntegerField()
 
     class Meta:
@@ -132,7 +132,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             'description',
             'cooking_time',
             'ingredients',
-            'tag',
+            'tags',
             'pub_date',
         ]
 
@@ -160,7 +160,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return recipe
 
     def update(self, recipe, validated_data):
-        recipe.tage.clear()
+        recipe.tags.clear()
         IngredientRecipe.objects.filter(recipe=recipe).delete()
         ingredients = validated_data.pop('ingredients')
         tags = validated_data.pop('tags')
@@ -168,29 +168,6 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return super().update(recipe, validated_data)
 
 
-# class RecipeSerializerShort(serializers.ModelSerializer):
-#     image = Base64ImageField()
-#     tags = TagSerializer(many=True, read_only=True)
-#     author = CustomUserSerializer(read_only=True)
-#     ingredients = serializers.SerializerMethodField()
-#     is_favorited = serializers.SerializerMethodField()
-#     is_in_shopping_cart = serializers.SerializerMethodField()
-
-
-#     class Meta:
-#         model = Recipe
-#         fields = [
-#             'id',
-#             'tags',
-#             'author',
-#             'ingredients',
-#             'name',
-#             'image',
-#             'text',
-#             'cooking_time',
-#             'is_favorited',
-#             'is_in_shopping_cart',
-#         ]
 class RecipeSerializerShort(serializers.ModelSerializer):
     image = Base64ImageField()
 

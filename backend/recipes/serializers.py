@@ -176,6 +176,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 #     is_favorited = serializers.SerializerMethodField()
 #     is_in_shopping_cart = serializers.SerializerMethodField()
 
+
 #     class Meta:
 #         model = Recipe
 #         fields = [
@@ -190,7 +191,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
 #             'is_favorited',
 #             'is_in_shopping_cart',
 #         ]
-
+class RecipeSerializerShort(serializers.ModelSerializer):
     image = Base64ImageField()
 
     class Meta:

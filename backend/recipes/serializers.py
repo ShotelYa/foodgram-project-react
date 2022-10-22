@@ -168,32 +168,32 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         return super().update(recipe, validated_data)
 
 
-class RecipeSerializerShort(serializers.ModelSerializer):
+# class RecipeSerializerShort(serializers.ModelSerializer):
+#     image = Base64ImageField()
+#     tags = TagSerializer(many=True, read_only=True)
+#     author = CustomUserSerializer(read_only=True)
+#     ingredients = serializers.SerializerMethodField()
+#     is_favorited = serializers.SerializerMethodField()
+#     is_in_shopping_cart = serializers.SerializerMethodField()
+
+#     class Meta:
+#         model = Recipe
+#         fields = [
+#             'id',
+#             'tags',
+#             'author',
+#             'ingredients',
+#             'name',
+#             'image',
+#             'text',
+#             'cooking_time',
+#             'is_favorited',
+#             'is_in_shopping_cart',
+#         ]
+
     image = Base64ImageField()
-    tags = TagSerializer(many=True, read_only=True)
-    author = CustomUserSerializer(read_only=True)
-    ingredients = serializers.SerializerMethodField()
-    is_favorited = serializers.SerializerMethodField()
-    is_in_shopping_cart = serializers.SerializerMethodField()
 
     class Meta:
         model = Recipe
-        fields = [
-            'id',
-            'tags',
-            'author',
-            'ingredients',
-            'name',
-            'image',
-            'text',
-            'cooking_time',
-            'is_favorited',
-            'is_in_shopping_cart',
-        ]
-
-    # image = Base64ImageField()
-
-    # class Meta:
-    #     model = Recipe
-    #     fields = ('id', 'name', 'image', 'cooking_time')
-    #     read_only_fields = ('id', 'name', 'image', 'cooking_time')
+        fields = ('id', 'name', 'image', 'cooking_time')
+        read_only_fields = ('id', 'name', 'image', 'cooking_time')

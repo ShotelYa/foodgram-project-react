@@ -115,12 +115,11 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     author = CustomUserSerializer(read_only=True)
     text = serializers.CharField(required=False)
     image = Base64ImageField()
-    description = serializers.CharField(required=False)
+    text = serializers.CharField(required=False)
     cooking_time = serializers.IntegerField()
     ingredients = AddIngredientSerializer(many=True)
     tags = serializers.PrimaryKeyRelatedField(many=True,
                                               queryset=Tag.objects.all())
-    pub_date = serializers.IntegerField()
 
     class Meta:
         model = Recipe
@@ -129,11 +128,10 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             'id',
             'title',
             'image',
-            'description',
+            'text',
             'cooking_time',
             'ingredients',
             'tags',
-            'pub_date',
         ]
 
     def validate_cooking_time(self, cooking_time):

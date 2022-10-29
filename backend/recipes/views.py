@@ -42,7 +42,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     filter_backends = (RecipeFilter, )
 
     def perform_create(self, serializer):
-        serializer.seve(author=self.request.user)
+        serializer.save(author=self.request.user)
 
     def add_or_delete(self, request, model, id):
         if request.method == 'DELETE':

@@ -113,7 +113,7 @@ class AddIngredientSerializer(serializers.ModelSerializer):
 
 class CreateRecipeSerializer(serializers.ModelSerializer):
     author = CustomUserSerializer(read_only=True)
-    text = serializers.CharField(required=False)
+    name = serializers.CharField(required=False)
     image = Base64ImageField()
     text = serializers.CharField(required=False)
     cooking_time = serializers.IntegerField()
@@ -126,9 +126,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         fields = [
             'author',
             'id',
-            'title',
             'image',
             'text',
+            'name',
             'cooking_time',
             'ingredients',
             'tags',

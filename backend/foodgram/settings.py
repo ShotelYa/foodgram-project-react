@@ -6,7 +6,7 @@ SECRET_KEY = '@msn(0!5glwue#vro51wq9%+ys_g)u#hx0swq4by2-7tt$14jw'
 
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['localhost', '164.90.162.154', 'backend', '127.0.0.1']
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -107,9 +107,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_URL = '/static/'
+STATIC_URL = '/media/'
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
+STATIC_ROOT = os.path.join(BASE_DIR, 'media/')
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

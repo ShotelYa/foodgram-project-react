@@ -4,9 +4,9 @@ from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 
-router.register('tag', TagViewSet)
-router.register('ingredient', IngredientViewSet)
-router.register('recipe', RecipeViewSet)
+router.register('tags', TagViewSet)
+router.register('ingredients', IngredientViewSet)
+router.register('recipes', RecipeViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

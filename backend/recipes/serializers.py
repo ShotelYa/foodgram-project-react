@@ -145,8 +145,8 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     def add_ingredients_tags(self, recipe, ingredients, tags):
         for ingredient in ingredients:
             IngredientRecipe.objects.create(recipe=recipe,
-                                            ingredient=ingredient["id"],
-                                            amount=ingredient["amount"])
+                ingredient_id=ingredient['ingredient']['id'],
+                amount=ingredient['amount'])
         for tag in tags:
             recipe.tags.add(tag)
 

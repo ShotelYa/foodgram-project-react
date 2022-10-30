@@ -8,7 +8,7 @@ from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
-from .filters import IngredientSearchFilter, RecipeFilter
+from .filters import IngredientSearchFilter
 from .models import Cart, Favorite, Ingredient, Recipe, Tag
 from .permissions import IsAuthorOrAdminOrReadOnly
 
@@ -39,7 +39,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = CreateRecipeSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly, )
-    filter_backends = (RecipeFilter, )
+    # filter_backends = (RecipeFilter, )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

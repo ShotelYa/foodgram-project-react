@@ -22,9 +22,9 @@ from .models import Ingredient, IngredientRecipe, Recipe, Tag
 
 @admin.register(IngredientRecipe)
 class IngredientAmount(admin.ModelAdmin):
-    list_display = ("id", "ingredient", "recipes")
-    search_fields = ("id", "ingredient", "recipes")
-    list_filter = ("id", "ingredient", "recipes")
+    list_display = ("id", "ingredient", "recipe")
+    search_fields = ("id", "ingredient", "recipe")
+    list_filter = ("id", "ingredient", "recipe")
     empty_value_display = "-NONE-"
 
 

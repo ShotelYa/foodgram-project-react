@@ -3,10 +3,10 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from recipes.serializers import (CreateRecipeSerializer, IngredientSerializer,
                                  RecipeSerializerShort, TagSerializer)
-from requests import Response
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from .filters import IngredientSearchFilter
 from .models import Cart, Favorite, Ingredient, Recipe, Tag
@@ -47,37 +47,38 @@ class RecipeViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
-        # def add_or_delete(self, request, model, id):
-        #     if request.method == 'DELETE':
-        #         obj = model.objects.filter(user=request.user, recipe__id=id)
-        #         if obj.exists():
-        #             obj.delete()
-        #             return Response(status=status.HTTP_204_NO_CONTENT)
-        #         return Response({'errors': 'There is no such recipe'},
-        #                         status=status.HTTP_400_BAD_REQUEST)
-        #     if model.objects.filter(user=request.user, recipe__id=id).exists():
-        #         return Response({'errors': 'The recipe has already been added'},
-        #                         status=status.HTTP_400_BAD_REQUEST)
-        #     recipe = get_object_or_404(Recipe, id=id)
-        #     model.objects.create(user=request.user, recipe=recipe)
-        #     serializer = RecipeSerializerShort(recipe)
-        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
     def add_or_delete(self, request, model, id):
         if request.method == 'DELETE':
             obj = model.objects.filter(user=request.user, recipe__id=id)
             if obj.exists():
                 obj.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response({'errors': 'Нет такого рецепта'},
+            return Response({'errors': 'There is no such recipe'},
                             status=status.HTTP_400_BAD_REQUEST)
-
         if model.objects.filter(user=request.user, recipe__id=id).exists():
-            return Response({'errors': 'Рецепт уже добавлен'},
+            return Response({'errors': 'The recipe has already been added'},
                             status=status.HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, id=id)
         model.objects.create(user=request.user, recipe=recipe)
         serializer = RecipeSerializerShort(recipe)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    # def add_or_delete(self, request, model, id):
+    #     if request.method == 'DELETE':
+    #         obj = model.objects.filter(user=request.user, recipe__id=id)
+    #         if obj.exists():
+    #             obj.delete()
+    #             return Response(status=status.HTTP_204_NO_CONTENT)
+    #         return Response({'errors': 'Нет такого рецепта'},
+    #                         status=status.HTTP_400_BAD_REQUEST)
+
+    #     if model.objects.filter(user=request.user, recipe__id=id).exists():
+    #         return Response({'errors': 'Рецепт уже добавлен'},
+    #                         status=status.HTTP_400_BAD_REQUEST)
+    #     recipe = get_object_or_404(Recipe, id=id)
+    #     model.objects.create(user=request.user, recipe=recipe)
+    #     serializer = RecipeSerializerShort(recipe)
+    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True,
             methods=('post', 'delete'),

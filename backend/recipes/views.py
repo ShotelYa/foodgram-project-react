@@ -79,7 +79,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
         methods=('get'),
         permission_classes=(IsAuthenticated),
     )
-    def shopping_cart(self, request):
+    def download_shopping_cart(self, request):
         ingredients = Ingredient.objects.filter(
             recipe__cart__user=request.user.id).values(
                 'ingredient__name',

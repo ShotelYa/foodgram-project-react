@@ -41,21 +41,38 @@ class RecipeViewSet(viewsets.ModelViewSet):
     serializer_class = CreateRecipeSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly, )
     pagination_class = CustomPagination
+
     # filter_backends = (RecipeFilter, )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
 
+        # def add_or_delete(self, request, model, id):
+        #     if request.method == 'DELETE':
+        #         obj = model.objects.filter(user=request.user, recipe__id=id)
+        #         if obj.exists():
+        #             obj.delete()
+        #             return Response(status=status.HTTP_204_NO_CONTENT)
+        #         return Response({'errors': 'There is no such recipe'},
+        #                         status=status.HTTP_400_BAD_REQUEST)
+        #     if model.objects.filter(user=request.user, recipe__id=id).exists():
+        #         return Response({'errors': 'The recipe has already been added'},
+        #                         status=status.HTTP_400_BAD_REQUEST)
+        #     recipe = get_object_or_404(Recipe, id=id)
+        #     model.objects.create(user=request.user, recipe=recipe)
+        #     serializer = RecipeSerializerShort(recipe)
+        #     return Response(serializer.data, status=status.HTTP_201_CREATED)
     def add_or_delete(self, request, model, id):
         if request.method == 'DELETE':
             obj = model.objects.filter(user=request.user, recipe__id=id)
             if obj.exists():
                 obj.delete()
                 return Response(status=status.HTTP_204_NO_CONTENT)
-            return Response({'errors': 'There is no such recipe'},
+            return Response({'errors': 'Нет такого рецепта'},
                             status=status.HTTP_400_BAD_REQUEST)
+
         if model.objects.filter(user=request.user, recipe__id=id).exists():
-            return Response({'errors': 'The recipe has already been added'},
+            return Response({'errors': 'Рецепт уже добавлен'},
                             status=status.HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, id=id)
         model.objects.create(user=request.user, recipe=recipe)
@@ -76,8 +93,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(
         detail=False,
-        methods=('get'),
-        permission_classes=(IsAuthenticated),
+        methods=('get', ),
+        permission_classes=(IsAuthenticated, ),
     )
     def download_shopping_cart(self, request):
         ingredients = Ingredient.objects.filter(

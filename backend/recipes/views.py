@@ -1,6 +1,7 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from pagination import CustomPagination
 from recipes.serializers import (CreateRecipeSerializer, IngredientSerializer,
                                  RecipeSerializerShort, TagSerializer)
 from requests import Response
@@ -39,6 +40,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
     serializer_class = CreateRecipeSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly, )
+    pagination_class = CustomPagination
     # filter_backends = (RecipeFilter, )
 
     def perform_create(self, serializer):

@@ -1,4 +1,5 @@
 from django.contrib.auth import get_user_model
+from recipes.pagination import CustomPagination
 from rest_framework import permissions, status
 from rest_framework.generics import ListAPIView, get_object_or_404
 from rest_framework.response import Response
@@ -46,6 +47,7 @@ class FollowListViewSet(ListAPIView):
         permissions.IsAuthenticated,
     ]
     serializer_class = FollowSerializer
+    pagination_class = CustomPagination
 
     def get_queryset(self):
         user = self.request.user

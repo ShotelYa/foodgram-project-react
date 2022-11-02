@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .filters import IngredientSearchFilter, CustomRecipeFilter
+from .filters import CustomRecipeFilter, IngredientSearchFilter
 from .models import Cart, Favorite, Ingredient, Recipe, Tag
 from .pagination import CustomPagination
 from .permissions import IsAuthorOrAdminOrReadOnly

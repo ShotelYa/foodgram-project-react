@@ -1,4 +1,4 @@
-from django_filters.rest_framework import filters
+from django_filters.rest_framework import FilterSet, filters
 from recipes.models import Recipe, Tag
 from rest_framework.filters import SearchFilter
 from users.models import User
@@ -8,7 +8,7 @@ class IngredientSearchFilter(SearchFilter):
     search_param = 'name'
 
 
-class CustomRecipeFilter(filters.FilterSet):
+class CustomRecipeFilter(FilterSet):
     tags = filters.ModelMultipleChoiceFilter(
         field_name="tags__slug",
         to_field_name="slug",

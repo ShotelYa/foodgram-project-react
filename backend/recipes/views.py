@@ -63,23 +63,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
         serializer = RecipeSerializerShort(recipe)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
-    # def add_or_delete(self, request, model, id):
-    #     if request.method == 'DELETE':
-    #         obj = model.objects.filter(user=request.user, recipe__id=id)
-    #         if obj.exists():
-    #             obj.delete()
-    #             return Response(status=status.HTTP_204_NO_CONTENT)
-    #         return Response({'errors': 'Нет такого рецепта'},
-    #                         status=status.HTTP_400_BAD_REQUEST)
-
-    #     if model.objects.filter(user=request.user, recipe__id=id).exists():
-    #         return Response({'errors': 'Рецепт уже добавлен'},
-    #                         status=status.HTTP_400_BAD_REQUEST)
-    #     recipe = get_object_or_404(Recipe, id=id)
-    #     model.objects.create(user=request.user, recipe=recipe)
-    #     serializer = RecipeSerializerShort(recipe)
-    #     return Response(serializer.data, status=status.HTTP_201_CREATED)
-
     @action(detail=True,
             methods=('post', 'delete'),
             permission_classes=(IsAuthenticated, ))

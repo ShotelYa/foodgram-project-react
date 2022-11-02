@@ -8,7 +8,7 @@ from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
-from .filters import IngredientSearchFilter
+from .filters import IngredientSearchFilter, RecipeFilter
 from .models import Cart, Favorite, Ingredient, Recipe, Tag
 from .pagination import CustomPagination
 from .permissions import IsAuthorOrAdminOrReadOnly
@@ -42,7 +42,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
     permission_classes = (IsAuthorOrAdminOrReadOnly, )
     pagination_class = CustomPagination
 
-    # filter_backends = (RecipeFilter, )
+    filter_backends = (RecipeFilter, )
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

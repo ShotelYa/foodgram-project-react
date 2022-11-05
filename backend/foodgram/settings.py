@@ -124,7 +124,7 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PAGINATION_CLASS':
-    'recipes.panination.CustomPagination',
+    'recipes.pagination.CustomPagination',
     'PAGE_SIZE':
     6,
 }

@@ -125,8 +125,7 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_PAGINATION_CLASS':
     'recipes.pagination.CustomPagination',
-    'PAGE_SIZE':
-    6,
+    'PAGE_SIZE': 6,
 }
 
 DJOSER = {

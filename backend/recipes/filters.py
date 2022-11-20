@@ -40,7 +40,7 @@ class CustomRecipeFilter(FilterSet):
 
     def get_shopping(self, queryset, name, item_value):
         if self.request.user.is_authenticated and item_value:
-            return queryset.filter(recipe_cart__user=self.request.user)
+            return queryset.filter(cart__user=self.request.user)
         return queryset
 
 

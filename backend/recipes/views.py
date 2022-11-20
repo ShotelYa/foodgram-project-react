@@ -1,6 +1,9 @@
+from os.path import abspath, dirname, join
+
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from fpdf import FPDF
 from recipes.serializers import (CreateRecipeSerializer, IngredientSerializer,
                                  RecipeSerializerShort, TagSerializer)
 from rest_framework import filters, status, viewsets
@@ -9,7 +12,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
 from .filters import CustomRecipeFilter, IngredientSearchFilter
-from .models import Cart, Favorite, Ingredient, Recipe, Tag
+from .models import Cart, Favorite, Ingredient, IngredientRecipe, Recipe, Tag
 from .pagination import CustomPagination
 from .permissions import IsAuthorOrAdminOrReadOnly
 
@@ -81,28 +84,55 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=(IsAuthenticated, ),
     )
     def download_shopping_cart(self, request):
-        ingredients = Ingredient.objects.filter(
-            recipe_ingredient__cart__user=request.user.id).values(
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.add_font('DejaVuSans-Oblique',
+                     fname=join(dirname(abspath(__file__)),
+                                'DejaVuSans-Oblique.ttf'))
+        pdf.set_font('DejaVuSans-Oblique', size=25)
+        ingredients = IngredientRecipe.objects.filter(
+            recipe__cart__user=request.user.id).values(
                 'ingredient__name',
-                'ingredient__measurement_unit__name').annotate(
-                    amount_sum=Sum('amount'))
-        shop_list = {}
-        for ingredient in ingredients:
-            amount = ingredient['amount']
-            name = ingredient['ingredient__name']
-            measurement_unit = ingredient["ingredient__measurement_unit"]
-            shop_list[name] = {
-                'amount': amount,
-                'measurement_unit': measurement_unit
-            }
-            out_list = ["Ingredient list\n\n"]
-        for i, value in shop_list.items():
-            out_list.append(f" {i} - {value['amount']} "
-                            f"{value['measurement_unit']}\n")
-        return HttpResponse(
-            out_list,
-            {
-                "Content-Type": "text/plain",
-                "Content-Disposition": 'attachment; filename="out_list.txt"',
-            },
-        )
+                'ingredient__measurement_unit__name').order_by(
+                    'ingredient__name',
+                    'ingredient__measurement_unit__name').annotate(
+                        amount_sum=Sum('amount'))
+        for n, ingredient in enumerate(ingredients, start=1):
+            pdf.cell(0,
+                     10, f'{n}. {ingredient["ingredient__name"]} '
+                     f'{ingredient["amount_sum"]} '
+                     f'{ingredient["ingredient__measurement_unit__name"]}',
+                     new_x='LMARGIN',
+                     new_y='NEXT')
+        response = HttpResponse(bytes(pdf.output()),
+                                content_type='application/pdf')
+        response['Content-Disposition'] = (
+            'attachment; filename="shopping_cart.pdf"')
+        return response
+
+    # def download_shopping_cart(self, request):
+    #     ingredients = Ingredient.objects.filter(
+    #         recipe_ingredient__cart__user=request.user.id).values(
+    #             'ingredient__name',
+    #             'recipe_ingredient__measurement_unit__name').annotate(
+    #                 amount_sum=Sum('amount'))
+    #     shop_list = {}
+    #     for ingredient in ingredients:
+    #         amount = ingredient['amount']
+    #         name = ingredient['ingredient__name']
+    #         measurement_unit = ingredient["ingredient__measurement_unit"]
+    #         shop_list[name] = {
+    #             'amount': amount,
+    #             'measurement_unit': measurement_unit
+    #         }
+    #         out_list = ["Ingredient list\n\n"]
+    #     for i, value in shop_list.items():
+    #         out_list.append(f" {i} - {value['amount']} "
+    #                         f"{value['measurement_unit']}\n")
+    #     return HttpResponse(
+    #         out_list,
+    #         {
+    #             "Content-Type": "text/plain",
+    #             "Content-Disposition": 'attachment; filename="out_list.txt"',
+    #         },
+    #     )

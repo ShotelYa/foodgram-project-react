@@ -1,9 +1,8 @@
 from django.contrib.auth import get_user_model
 from djoser.serializers import UserCreateSerializer, UserSerializer
+from recipes.models import Recipe
 from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
-
-from recipes.models import Recipe
 from users.models import Follow
 
 User = get_user_model()

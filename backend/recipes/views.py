@@ -87,7 +87,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                     amount_sum=Sum('amount')))
         shop_list = {}
         for ingredient in ingredients:
-            amount = ingredient['amount']
+            amount = ingredient['amount_sum']
             name = ingredient['ingredient__name']
             measurement_unit = ingredient["ingredient__measurement_unit"]
             shop_list[name] = {

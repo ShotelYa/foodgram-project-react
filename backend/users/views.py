@@ -29,7 +29,7 @@ class FollowApiView(APIView):
         follow_create = Follow.objects.create(user=user, author=author)
         serializer = FollowSerializer(follow_create,
                                       context={"request": request})
-        return Response(serializer.data, status=status.HTTP_201_CREATE)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     def delete(self, request, pk):
         user = request.user

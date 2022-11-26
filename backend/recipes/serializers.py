@@ -32,24 +32,24 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'measurement_unit']
 
 
-class CartSerializer(serializers.ModelSerializer):
-    recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all())
-    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+# class CartSerializer(serializers.ModelSerializer):
+#     recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all())
+#     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
-    class Meta:
-        model = Cart
-        fields = [
-            'recipe',
-            'user',
-        ]
+#     class Meta:
+#         model = Cart
+#         fields = [
+#             'recipe',
+#             'user',
+#         ]
 
-    def validate(self, data):
-        user = data['user']
-        recipe_id = data['recipe'].id
-        if Cart.objects.filter(user=user, recipe__id=recipe_id).exists():
-            raise ValidationError(
-                'This recipe has already been added to the cart')
-        return data
+#     def validate(self, data):
+#         user = data['user']
+#         recipe_id = data['recipe'].id
+#         if Cart.objects.filter(user=user, recipe__id=recipe_id).exists():
+#             raise ValidationError(
+#                 'This recipe has already been added to the cart')
+#         return data
 
 
 class FavoriteSerializer(serializers.ModelSerializer):

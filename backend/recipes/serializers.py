@@ -59,7 +59,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Favorite
-        fields = ("recipe", "user")
+        fields = ['recipe', 'user']
 
 
 class ListRecipeSerializer(serializers.ModelSerializer):
@@ -105,7 +105,7 @@ class ListRecipeSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         if not request or request.user.is_anonymous:
             return False
-        return Cart.objects.filter(recipe=obj, user=request.user).exists()
+        return Recipe.objects.filter(recipe=obj, user=request.user).exists()
 
 
 class AddIngredientSerializer(serializers.ModelSerializer):

@@ -84,9 +84,6 @@ class FollowSerializer(serializers.ModelSerializer):
             return False
         return Follow.objects.filter(user=user, author=obj.id).exists()
 
-    # def get_is_subscribed(self, obj):
-    #     return Follow.objects.filter(user=obj.user, author=obj.id).exists()
-
     def get_recipes(self, obj):
         recipes = Recipe.objects.filter(author=obj.author)
         serializer = RecipeFollowSerializer(recipes, many=True)

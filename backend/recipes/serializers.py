@@ -32,26 +32,6 @@ class IngredientRecipeSerializer(serializers.ModelSerializer):
         fields = ['id', 'name', 'measurement_unit']
 
 
-# class CartSerializer(serializers.ModelSerializer):
-#     recipe = serializers.PrimaryKeyRelatedField(queryset=Recipe.objects.all())
-#     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-
-#     class Meta:
-#         model = Cart
-#         fields = [
-#             'recipe',
-#             'user',
-#         ]
-
-#     def validate(self, data):
-#         user = data['user']
-#         recipe_id = data['recipe'].id
-#         if Cart.objects.filter(user=user, recipe__id=recipe_id).exists():
-#             raise ValidationError(
-#                 'This recipe has already been added to the cart')
-#         return data
-
-
 class FavoriteSerializer(serializers.ModelSerializer):
     recipe = serializers.PrimaryKeyRelatedField(
         queryset=Favorite.objects.all())
@@ -94,12 +74,6 @@ class ListRecipeSerializer(serializers.ModelSerializer):
         if user.is_anonymous:
             return False
         return Recipe.objects.filter(favorites__user=user, id=obj.id).exists()
-
-    # def get_is_favorited(self, obj):
-    #     request = self.context.get('request')
-    #     if not request or request.user.is_anonymous:
-    #         return False
-    #     return Favorite.objects.filter(recipe=obj, user=request.user).exists()
 
     def get_is_in_shopping_cart(self, obj):
         user = self.context.get('request').user

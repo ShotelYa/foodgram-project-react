@@ -1,7 +1,7 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from recipes.serializers import (CreateRecipeSerializer, IngredientSerializer,
+from recipes.serializers import (ListRecipeSerializer, IngredientSerializer,
                                  RecipeSerializerShort, TagSerializer)
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
@@ -38,7 +38,7 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = CreateRecipeSerializer
+    serializer_class = ListRecipeSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly, )
     pagination_class = CustomPagination
 

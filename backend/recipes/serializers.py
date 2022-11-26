@@ -1,10 +1,10 @@
 from django.contrib.auth import get_user_model
-from django.forms import ValidationError
+# from django.forms import ValidationError
 from drf_extra_fields.fields import Base64ImageField
 from rest_framework import serializers
 from users.serializers import CustomUserSerializer
 
-from .models import Cart, Favorite, Ingredient, IngredientRecipe, Recipe, Tag
+from .models import Favorite, Ingredient, IngredientRecipe, Recipe, Tag
 
 User = get_user_model()
 

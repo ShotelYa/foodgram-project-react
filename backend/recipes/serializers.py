@@ -120,13 +120,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 'Cooking time must be greater than 0')
         return cooking_time
 
-    def add_ingredients_tags(self, recipe, ingredients):
+    def add_ingredients_tags(self, recipe, ingredients, tags):
         for ingredient in ingredients:
             IngredientRecipe.objects.create(recipe=recipe,
                                             ingredient=ingredient['id'],
                                             amount=ingredient['amount'])
-        # for tag in tags:
-        #     recipe.tags.add(tag)
+        for tag in tags:
+            recipe.tags.add(tag)
 
     def create(self, validated_data):
         ingredients = validated_data.pop('ingredients')
@@ -136,14 +136,13 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         self.add_ingredients_tags(recipe, ingredients, tags)
         return recipe
 
-    def update(self, instance, validated_data):
-        ingredients_data = validated_data.pop('ingredients')
-        tags_data = validated_data.pop('tags')
-        super().update(instance, validated_data)
-        instance.tags.set(tags_data)
-        IngredientRecipe.objects.filter(recipe=instance).delete()
-        self.add_ingredients_tags(ingredients_data, instance)
-        return instance
+    def update(self, recipe, validated_data):
+        recipe.tags.clear()
+        IngredientRecipe.objects.filter(recipe=recipe).delete()
+        ingredients = validated_data.pop("ingredients")
+        tags = validated_data.pop("tags")
+        self.add_recipe_ingredients_tags(recipe, ingredients, tags)
+        return super().update(recipe, validated_data)
 
 
 class RecipeSerializerShort(serializers.ModelSerializer):

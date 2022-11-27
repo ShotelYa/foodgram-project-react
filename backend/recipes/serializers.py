@@ -120,7 +120,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
                 'Cooking time must be greater than 0')
         return cooking_time
 
-    def add_ingredients_tags(self, recipe, ingredients, tags):
+    def add_ingredients_tags(self, recipe, ingredients):
         for ingredient in ingredients:
             IngredientRecipe.objects.create(recipe=recipe,
                                             ingredient=ingredient['id'],

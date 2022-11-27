@@ -1,8 +1,9 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
-from recipes.serializers import (IngredientSerializer, ListRecipeSerializer,
-                                 RecipeSerializerShort, TagSerializer)
+from recipes.serializers import (CreateRecipeSerializer, IngredientSerializer,
+                                 ListRecipeSerializer, RecipeSerializerShort,
+                                 TagSerializer)
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -38,11 +39,16 @@ class IngredientViewSet(viewsets.ReadOnlyModelViewSet):
 
 class RecipeViewSet(viewsets.ModelViewSet):
     queryset = Recipe.objects.all()
-    serializer_class = ListRecipeSerializer
+    serializer_class = CreateRecipeSerializer
     permission_classes = (IsAuthorOrAdminOrReadOnly, )
     pagination_class = CustomPagination
 
     filter_class = CustomRecipeFilter
+
+    def get_serializer_class(self):
+        if self.request.method == "POST" or self.request.method == "PATCH":
+            return CreateRecipeSerializer
+        return ListRecipeSerializer
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

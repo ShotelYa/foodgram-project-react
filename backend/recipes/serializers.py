@@ -136,13 +136,14 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         self.add_ingredients_tags(recipe, ingredients, tags)
         return recipe
 
-    def update(self, recipe, validated_data):
-        recipe.tags.clear()
-        IngredientRecipe.objects.filter(recipe=recipe).delete()
-        ingredients = validated_data.pop('ingredients')
-        tags = validated_data.pop('tags')
-        self.add_ingredients_tags(recipe, ingredients, tags)
-        return super().update(recipe, validated_data)
+    def update(self, instance, validated_data):
+        ingredients_data = validated_data.pop('ingredientamount_set')
+        tags_data = validated_data.pop('tags')
+        super().update(instance, validated_data)
+        instance.tags.set(tags_data)
+        IngredientRecipe.objects.filter(recipe=instance).delete()
+        self.add_ingredients(ingredients_data, instance)
+        return instance
 
 
 class RecipeSerializerShort(serializers.ModelSerializer):

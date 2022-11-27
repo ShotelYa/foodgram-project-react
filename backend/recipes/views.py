@@ -1,8 +1,8 @@
 from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
+from recipes.serializers import ListRecipeSerializer  # RecipeSerializerShort,
 from recipes.serializers import (CreateRecipeSerializer, IngredientSerializer,
-                                 ListRecipeSerializer, RecipeSerializerShort,
                                  TagSerializer)
 from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
@@ -66,7 +66,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
         recipe = get_object_or_404(Recipe, id=id)
         model.objects.create(user=request.user, recipe=recipe)
-        serializer = RecipeSerializerShort(recipe)
+        serializer = CreateRecipeSerializer(recipe)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @action(detail=True,

@@ -89,7 +89,9 @@ class IngredientRecipe(models.Model):
         ]
 
     def __str__(self):
-        return f"{self.ingredient}: {self.recipe}"
+        return (
+            f'Количество {self.ingredient.name} {self.amount} '
+            f'{self.ingredient.measurement_unit}')
 
 
 class Favorite(models.Model):

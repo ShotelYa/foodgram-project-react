@@ -74,7 +74,7 @@ class Recipe(models.Model):
 class IngredientRecipe(models.Model):
     ingredient = models.ForeignKey(Ingredient, on_delete=models.CASCADE)
     recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE)
-    amount = models.PositiveIntegerField()
+    amount = models.PositiveIntegerField(verbose_name='amount', )
 
     class Meta:
         ordering = ['-id']
@@ -89,9 +89,8 @@ class IngredientRecipe(models.Model):
         ]
 
     def __str__(self):
-        return (
-            f'Количество {self.ingredient.name} {self.amount} '
-            f'{self.ingredient.measurement_unit}')
+        return (f'Количество {self.ingredient.name} {self.amount} '
+                f'{self.ingredient.measurement_unit}')
 
 
 class Favorite(models.Model):

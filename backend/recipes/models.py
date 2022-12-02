@@ -14,8 +14,8 @@ class Ingredient(models.Model):
         verbose_name = 'Ingredient'
         verbose_name_plural = 'Ingredients'
 
-    def __str__(self):
-        return '{} {}'.format(self.name, self.measurement_unit)
+    # def __str__(self):
+    #     return '{} {}'.format(self.name, self.measurement_unit)
 
 
 class Tag(models.Model):
@@ -89,9 +89,9 @@ class IngredientRecipe(models.Model):
                 name='unique_ingredients')
         ]
 
-    def __str__(self):
-        return (f'Количество {self.ingredient.name} {self.amount} '
-                f'{self.ingredient.measurement_unit}')
+    # def __str__(self):
+    #     return (f'Количество {self.ingredient.name} {self.amount} '
+    #             f'{self.ingredient.measurement_unit}')
 
 
 class Favorite(models.Model):

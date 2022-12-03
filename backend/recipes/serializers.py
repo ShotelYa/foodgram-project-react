@@ -47,7 +47,6 @@ class ListRecipeSerializer(serializers.ModelSerializer):
     tags = TagSerializer(many=True, read_only=True)
     author = CustomUserSerializer(read_only=True)
     ingredients = serializers.SerializerMethodField(
-        source='ingredientamount_set',
         many=True,
         read_only=True,
     )

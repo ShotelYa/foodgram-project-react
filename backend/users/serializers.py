@@ -5,7 +5,7 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from users.models import Follow
 
-from .serializers import RecipeSerializerShort
+from recipes.serializers import RecipeSerializerShort
 
 User = get_user_model()
 

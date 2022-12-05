@@ -99,7 +99,7 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
     image = Base64ImageField()
     text = serializers.CharField(required=False)
     cooking_time = serializers.IntegerField()
-    ingredients = AddIngredientSerializer(many=True)
+    ingredients = AddIngredientSerializer(many=True, source='ingredientrecipe_set')
     tags = serializers.PrimaryKeyRelatedField(many=True,
                                               queryset=Tag.objects.all())
 

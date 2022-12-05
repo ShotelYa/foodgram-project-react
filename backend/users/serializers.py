@@ -5,6 +5,8 @@ from rest_framework import serializers
 from rest_framework.validators import UniqueValidator
 from users.models import Follow
 
+from .serializers import RecipeSerializerShort
+
 User = get_user_model()
 
 
@@ -84,10 +86,17 @@ class FollowSerializer(serializers.ModelSerializer):
             return False
         return Follow.objects.filter(user=user, author=obj.id).exists()
 
+    # def get_recipes(self, obj):
+    #     recipes = Recipe.objects.filter(author=obj.author)
+    #     serializer = RecipeFollowSerializer(recipes, many=True)
+    #     return serializer.data
     def get_recipes(self, obj):
-        recipes = Recipe.objects.filter(author=obj.author)
-        serializer = RecipeFollowSerializer(recipes, many=True)
-        return serializer.data
+        request = self.context.get('request')
+        limit = request.GET.get('recipes_limit')
+        queryset = Recipe.objects.filter(author=obj.author)
+        if limit:
+            queryset = queryset[:int(limit)]
+        return RecipeSerializerShort(queryset, many=True).data
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj.author).count()

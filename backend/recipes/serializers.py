@@ -82,15 +82,23 @@ class ListRecipeSerializer(serializers.ModelSerializer):
         return Recipe.objects.filter(cart__user=user, id=obj.id).exists()
 
 
+# class AddIngredientSerializer(serializers.ModelSerializer):
+#     id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
+#     name = serializers.ReadOnlyField(source='ingredient.name')
+#     measurement_unit = serializers.ReadOnlyField(
+#         source='ingredient.measurement_unit.name')
+
+#     class Meta:
+#         model = IngredientRecipe
+#         fields = ['id', 'name', 'measurement_unit', 'amount']
+
 class AddIngredientSerializer(serializers.ModelSerializer):
     id = serializers.PrimaryKeyRelatedField(queryset=Ingredient.objects.all())
-    name = serializers.ReadOnlyField(source='ingredient.name')
-    measurement_unit = serializers.ReadOnlyField(
-        source='ingredient.measurement_unit.name')
+    amount = serializers.IntegerField(min_value=1)
 
     class Meta:
         model = IngredientRecipe
-        fields = ['id', 'name', 'measurement_unit', 'amount']
+        fields = ("id", "amount")
 
 
 class CreateRecipeSerializer(serializers.ModelSerializer):

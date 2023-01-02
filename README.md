@@ -40,9 +40,7 @@ sudo docker compose exec backend python manage.py collectstatic --no-input
 ```
 sudo docker compose exec backend python manage.py load-data
 ```
-Redoc:
-http://185.72.246.211/redoc/
-***
+
 ### Example of API request:
 
 Request for recipes:

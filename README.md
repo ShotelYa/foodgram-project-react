@@ -18,26 +18,27 @@ SECRET_KEY=<...> # kay from settings.py
 ```
 
 1.Assembly and run the container
-
+```
 sudo docker compose up -d --build --force-recreate
 ```
 2.Migrations
-
+```
 sudo docker compose exec backend python manage.py makemigrations
+```
 sudo docker compose exec backend python manage.py migrate
 ```
 3.Create a Django superuser
-
+```
 sudo docker compose exec backend python manage.py createsuperuser
 ```
 4.Collect static
-
+```
 sudo docker compose exec backend python manage.py collectstatic --no-input
 ```
 5.Load data to database
-
+```
 sudo docker compose exec backend python manage.py load-data
-
+```
 Redoc:
 http://185.72.246.211/redoc/
 ***

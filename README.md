@@ -25,6 +25,7 @@ sudo docker compose up -d --build --force-recreate
 ```
 sudo docker compose exec backend python manage.py makemigrations
 ```
+```
 sudo docker compose exec backend python manage.py migrate
 ```
 3.Create a Django superuser
